@@ -1,0 +1,194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6801374090670096136
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6801374090670096135}
+  - component: {fileID: 1460505891671879233}
+  m_Layer: 0
+  m_Name: MovementPlus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6801374090670096135
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801374090670096136}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.8290101, y: -0.31715408, z: 3.7712715}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1460505891671879233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801374090670096136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec3b8824308adc64fb1901cef109132a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mutators:
+  - name: Movement Plus
+    description: 0.0.1
+    menuImage: {fileID: 0}
+    mutatorPrefab: {fileID: 2728837566490073815, guid: 72953313f8d8e2c41985a9e093372da9, type: 3}
+    configuration:
+      labels:
+      - id: label1
+        displayName: General
+        orderPriority: 0
+      - id: label2
+        displayName: Primaries
+        orderPriority: 10
+      - id: label3
+        displayName: Secondaries
+        orderPriority: 20
+      - id: label4
+        displayName: Small Gear
+        orderPriority: 30
+      - id: label5
+        displayName: Large Gear
+        orderPriority: 40
+      - id: label100
+        displayName: Overrides
+        orderPriority: 100
+      - id: label200
+        displayName: '<color=grey>Format is: weaponName|adsSpeedMultiplier|weaponWeight</color>'
+        orderPriority: 200
+      - id: label50
+        displayName: Category Modifiers
+        orderPriority: 50
+      integers: []
+      floats:
+      - id: defaultPrimaryWeight
+        displayName: Base Weight
+        orderPriority: 11
+        value: 3
+      - id: defaultSecondaryWeight
+        displayName: Base Weight
+        orderPriority: 21
+        value: 1.5
+      - id: defaultSmallGearWeight
+        displayName: Base Weight
+        orderPriority: 31
+        value: 0.5
+      - id: defaultLargeGearWeight
+        displayName: Base Weight
+        orderPriority: 41
+        value: 2.5
+      ranges:
+      - id: defaultPrimaryAdsMultiplier
+        displayName: Base ADS Multiplier
+        orderPriority: 12
+        value:
+          value: 0.5
+          min: 0
+          max: 1
+          wholeNumbers: 0
+      - id: defaultSecondaryAdsMultiplier
+        displayName: Base ADS Multiplier
+        orderPriority: 22
+        value:
+          value: 0.85
+          min: 0
+          max: 1
+          wholeNumbers: 0
+      - id: defaultSmallGearAdsMultiplier
+        displayName: Base ADS Multiplier
+        orderPriority: 32
+        value:
+          value: 1
+          min: 0
+          max: 1
+          wholeNumbers: 0
+      - id: defaultLargeGearAdsMultiplier
+        displayName: Base ADS Multiplier
+        orderPriority: 42
+        value:
+          value: 0.5
+          min: 0
+          max: 1
+          wholeNumbers: 0
+      strings:
+      - id: line1
+        displayName: Line 1
+        orderPriority: 101
+        value: HMG|0.25|6,GREASER|0.75|2.25,SIGNAL DMR|0.35|4.25,SL-DEFENDER|0.25|5
+      - id: line2
+        displayName: Line 2
+        orderPriority: 102
+        value: 
+      - id: line3
+        displayName: Line 3
+        orderPriority: 103
+        value: 
+      - id: line4
+        displayName: Line 4
+        orderPriority: 104
+        value: 
+      - id: line5
+        displayName: Line 5
+        orderPriority: 105
+        value: 
+      - id: line6
+        displayName: Line 6
+        orderPriority: 106
+        value: 
+      - id: line7
+        displayName: Line 7
+        orderPriority: 107
+        value: 
+      - id: line8
+        displayName: Line 8
+        orderPriority: 108
+        value: 
+      - id: line9
+        displayName: Line 9
+        orderPriority: 105
+        value: 
+      - id: line10
+        displayName: Line 10
+        orderPriority: 110
+        value: 
+      - id: categoryLine1
+        displayName: Line 1
+        orderPriority: 51
+        value: Assault|1,Marksman|2,Close Quarters|-1,Stealth|0.5,PDW|-0.5,Anti Armor|2,Equipment|0.5
+      - id: categoryLine2
+        displayName: Line 2
+        orderPriority: 52
+        value: 
+      - id: categoryLine3
+        displayName: Line 3
+        orderPriority: 53
+        value: 
+      - id: categoryLine4
+        displayName: Line 4
+        orderPriority: 54
+        value: 
+      - id: categoryLine5
+        displayName: Line 5
+        orderPriority: 55
+        value: 
+      bools:
+      - id: weightSystemEnabled
+        displayName: Weight System
+        orderPriority: 1
+        value: 1
+      dropdowns: []
