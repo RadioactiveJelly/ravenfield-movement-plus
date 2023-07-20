@@ -1,12 +1,11 @@
 -- Register the behaviour
-behaviour("MovementPlus")
+behaviour("MovementExpansion")
 
-function MovementPlus:Awake()
-	self.gameObject.name = "MovementPlus"
-	--self:CacheWeaponMeshSizes()
+function WeightSystem:Awake()
+	self.gameObject.name = "MovementExpansion"
 end
 
-function MovementPlus:Start()
+function WeightSystem:Start()
 	-- Run when behaviour is created
 	self.baseMovementSpeed = 1
 	self.weightMultiplier = 1
@@ -45,8 +44,6 @@ function MovementPlus:Start()
 	self.heavyThreshold = 8
 	self.heavyWeightMultiplier = 0.75
 
-	self.weightMultiplier = 1
-
 	self.isAiming = false
 	self.script.AddValueMonitor("monitorIsAiming", "onIsAimingStateChanged")
 
@@ -54,7 +51,7 @@ function MovementPlus:Start()
 end
 
 --Parse string lines for weapon data
-function MovementPlus:ParseOverrideString(str)
+function WeightSystem:ParseOverrideString(str)
 	for word in string.gmatch(str, '([^,]+)') do
 		local iterations = 0
 		local name = ""
@@ -74,7 +71,7 @@ function MovementPlus:ParseOverrideString(str)
 	end
 end
 
-function MovementPlus:ParseTagString(str)
+function WeightSystem:ParseTagString(str)
 	for word in string.gmatch(str, '([^,]+)') do
 		local iterations = 0
 		local name = ""
@@ -91,12 +88,12 @@ function MovementPlus:ParseTagString(str)
 	end
 end
 
-function MovementPlus:monitorIsAiming()
+function WeightSystem:monitorIsAiming()
 	if Player.actor.activeWeapon == nil then return false end
 	return Player.actor.activeWeapon.isAiming
 end
 
-function MovementPlus:onIsAimingStateChanged()
+function WeightSystem:onIsAimingStateChanged()
 	if Player.actor.activeWeapon == nil then return end
 
 	local isAiming = Player.actor.activeWeapon.isAiming
@@ -108,72 +105,57 @@ function MovementPlus:onIsAimingStateChanged()
 		if weaponData then
 			adsMultiplier = weaponData.adsMultiplier
 		end
-		self:AddModifier("ADSPenalty", adsMultiplier)
+		if _movementCoreInstance then
+			_movementCoreInstance:AddModifier(Player.actor, "ADSPenalty", adsMultiplier)
+		end
 	else
-		self:RemoveModifier("ADSPenalty")
+		if _movementCoreInstance then
+			_movementCoreInstance:RemoveModifier(Player.actor, "ADSPenalty")
+		end
 	end
 end
 
-function MovementPlus:AddModifier(modifierName, modifierValue)
-	self.movementSpeedModifiers[modifierName] = modifierValue
-	self:CalculateMovementSpeed(Player.actor)
+function WeightSystem:onActorSpawn(actor)
+	self:EvaluateWeapons(actor)
 end
 
-function MovementPlus:RemoveModifier(modifierName)
-	self.movementSpeedModifiers[modifierName] = nil
-	self:CalculateMovementSpeed(Player.actor)
-end
-
-function MovementPlus:CalculateMovementSpeed(actor)
-	local multiplier = 1
-	for modifier, value in pairs(self.movementSpeedModifiers) do
-		multiplier = multiplier * value
-	end
-	self.currentMovementSpeed = self.baseMovementSpeed * multiplier * self.weightMultiplier
-	actor.speedMultiplier = self.currentMovementSpeed
-end
-
-function MovementPlus:onActorSpawn(actor)
-	if actor.isPlayer then
-		self:EvaluateWeapons(actor)
-		self:CalculateMovementSpeed(actor)
-	end
-end
-
-function MovementPlus:EvaluateWeapons(actor)
+function WeightSystem:EvaluateWeapons(actor)
 	local totalWeight = 0
 	for i = 1, #actor.weaponSlots, 1 do
 		local weapon = actor.weaponSlots[i]
 		local weaponEntry = weapon.weaponEntry
 		local cleanName = string.gsub(weaponEntry.name,"<.->","")
 		local data = self.weaponData[cleanName]
+		if data == nil then data = self:GetStatsFromDataContainer(cleanName,weapon) end
 		if data == nil then data = self:AutoGenerateWeaponStats(cleanName, weaponEntry) end
 
 		local weaponWeight = 0
 		weaponWeight = data.weaponWeight
 
-		print(weaponEntry.name .. ": " .. weaponWeight)
 		totalWeight = totalWeight + weaponWeight
 	end
 
-	print("Total weight: " .. totalWeight)
+	--print(actor.name .. " total weight: " .. totalWeight)
+	local weightMultiplier = 1
 	if totalWeight >= self.heavyThreshold then
-		self.weightMultiplier = self.heavyWeightMultiplier
+		weightMultiplier = self.heavyWeightMultiplier
 	elseif totalWeight >= self.mediumThreshold then
-		self.weightMultiplier = self.mediumWeightMultiplier
-	else
-		self.weightMultiplier = 1
+		weightMultiplier = self.mediumWeightMultiplier
+	end
+	
+	if _movementCoreInstance then
+		_movementCoreInstance:AddModifier(actor, "Weight", weightMultiplier)
 	end
 end
 
-function MovementPlus:GenerateDefaultData(weaponWeight, adsMultiplier)
+function WeightSystem:GenerateDefaultData(weaponWeight, adsMultiplier)
 	local newData = {}
 	newData.adsMultiplier = adsMultiplier
 	newData.weaponWeight = weaponWeight
 	return newData
 end
 
-function MovementPlus:GetWeightModifiersFromTags(weaponEntry)
+function WeightSystem:GetWeightModifiersFromTags(weaponEntry)
 	local totalWeightMod = 0
 	for i = 1, #weaponEntry.tags, 1 do
 		local tag = string.lower(weaponEntry.tags[i])
@@ -185,27 +167,59 @@ function MovementPlus:GetWeightModifiersFromTags(weaponEntry)
 	return totalWeightMod
 end
 
-function MovementPlus:CreateData(name ,adsMultiplier, weaponWeight)
+function WeightSystem:CreateData(name ,adsMultiplier, weaponWeight)
 	local data = {}
 	data.adsMultiplier = adsMultiplier
 	data.weaponWeight = weaponWeight
 	self.weaponData[name] = data
 
-	print("[Movement Plus] Registered " .. name)
-	print(" ----ADS Multiplier " .. adsMultiplier)
-	print(" ----Weight " .. weaponWeight)
+	--print("[Movement Plus] Registered " .. name)
+	--print("[Movement Plus] --ADS Multiplier " .. adsMultiplier)
+	--print("[Movement Plus] --Weight " .. weaponWeight)
 	return data
 end
 
-function MovementPlus:AutoGenerateWeaponStats(cleanName, weaponEntry)
+function WeightSystem:AutoGenerateWeaponStats(cleanName, weaponEntry)
+	local weaponWeight = self:GenerateWeight(weaponEntry)
+	local adsMultiplier = self:GenerateADSMultiplier(weaponEntry, weaponWeight)
+	
+	return self:CreateData(cleanName, adsMultiplier, weaponWeight)
+end
+
+function WeightSystem:GenerateWeight(weaponEntry)
 	local slotWeight = self.defaultData[weaponEntry.slot].weaponWeight
 	local tagWeight = self:GetWeightModifiersFromTags(weaponEntry)
-	local weaponWeight = slotWeight + tagWeight
 
+	return slotWeight + tagWeight
+end
+
+function WeightSystem:GenerateADSMultiplier(weaponEntry, weaponWeight)
 	--The greater the weaponWeight is compared to slotWeight, the slower ADS movement will be
+	local slotWeight = self.defaultData[weaponEntry.slot].weaponWeight
+
 	local dif = weaponWeight/slotWeight - 1
 	local adsMultiplier = (1-dif) * self.defaultData[weaponEntry.slot].adsMultiplier
 	if adsMultiplier > 1 then adsMultiplier = 1 end
-	
+
+	return adsMultiplier
+end
+
+function WeightSystem:GetStatsFromDataContainer(cleanName, weapon)
+	local dataContainer = weapon.gameObject.GetComponent(DataContainer)
+	if dataContainer == nil then return nil end
+
+	local weaponWeight = 1
+	if dataContainer.HasFloat("WeaponWeight") then
+		weaponWeight = dataContainer.GetFloat("WeaponWeight")
+	else
+		weaponWeight = self:GenerateWeight(weapon.weaponEntry)
+	end
+
+	local adsMultiplier = 1
+	if dataContainer.HasFloat("ADSMultiplier") then
+		adsMultiplier = dataContainer.GetFloat("ADSMultiplier")
+	else
+		adsMultiplier = self:GenerateADSMultiplier(weapon.weaponEntry, weaponWeight)
+	end
 	return self:CreateData(cleanName, adsMultiplier, weaponWeight)
 end

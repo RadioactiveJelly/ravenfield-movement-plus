@@ -44,6 +44,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mutators:
+  - name: Movement Core
+    description: 0.0.1
+    menuImage: {fileID: 0}
+    mutatorPrefab: {fileID: 9145976721689512765, guid: c470196b0f6b97b48907e251901669c7, type: 3}
+    configuration:
+      labels: []
+      integers: []
+      floats:
+      - id: BaseActorSpeed
+        displayName: Base Actor Speed
+        orderPriority: 0
+        value: 1
+      ranges: []
+      strings: []
+      bools: []
+      dropdowns: []
   - name: Movement Plus
     description: 0.0.1
     menuImage: {fileID: 0}
@@ -97,7 +113,7 @@ MonoBehaviour:
         displayName: Base ADS Multiplier
         orderPriority: 12
         value:
-          value: 0.5
+          value: 0.95
           min: 0
           max: 1
           wholeNumbers: 0
@@ -105,7 +121,7 @@ MonoBehaviour:
         displayName: Base ADS Multiplier
         orderPriority: 22
         value:
-          value: 0.85
+          value: 1
           min: 0
           max: 1
           wholeNumbers: 0
@@ -121,7 +137,7 @@ MonoBehaviour:
         displayName: Base ADS Multiplier
         orderPriority: 42
         value:
-          value: 0.5
+          value: 0.95
           min: 0
           max: 1
           wholeNumbers: 0
@@ -129,7 +145,7 @@ MonoBehaviour:
       - id: line1
         displayName: Line 1
         orderPriority: 101
-        value: HMG|0.25|6,GREASER|0.75|2.25,SIGNAL DMR|0.35|4.25,SL-DEFENDER|0.25|5
+        value: HMG|0.45|6,GREASER|0.75|2.25,SIGNAL DMR|0.35|4.25,SL-DEFENDER|0.25|5
       - id: line2
         displayName: Line 2
         orderPriority: 102
