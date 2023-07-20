@@ -1,8 +1,8 @@
 -- Register the behaviour
-behaviour("MovementExpansion")
+behaviour("WeightSystem")
 
 function WeightSystem:Awake()
-	self.gameObject.name = "MovementExpansion"
+	self.gameObject.name = "WeightSystem"
 end
 
 function WeightSystem:Start()
@@ -144,7 +144,7 @@ function WeightSystem:EvaluateWeapons(actor)
 	end
 	
 	if _movementCoreInstance then
-		_movementCoreInstance:AddModifier(actor, "Weight", weightMultiplier)
+		_movementCoreInstance:AddModifier(actor, "WSWeight", weightMultiplier)
 	end
 end
 
