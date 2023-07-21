@@ -8,6 +8,7 @@ function MovementCore:Awake()
 	_movementCoreInstance = self
 
 	self.baseActorSpeed = self.script.mutator.GetConfigurationFloat("BaseActorSpeed")
+	self.doDebug = self.script.mutator.GetConfigurationBool("Debug")
 
 	self.actorData = {}
 
@@ -38,7 +39,9 @@ function MovementCore:CalculateMovementSpeed(actor)
 	end
 	
 	actor.speedMultiplier = self.baseActorSpeed * multiplier
-	--print(actor.name .. " speed is " .. actor.speedMultiplier)
+	if self.doDebug then
+		print(actor.name .. " speed is " .. actor.speedMultiplier)
+	end
 end
 
 function MovementCore:RemoveAllModifiers(actor)
