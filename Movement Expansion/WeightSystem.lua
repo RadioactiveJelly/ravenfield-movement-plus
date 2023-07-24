@@ -99,6 +99,7 @@ function WeightSystem:onIsAimingStateChanged()
 	local isAiming = Player.actor.activeWeapon.isAiming
 	if isAiming then
 		local weaponEntry = Player.actor.activeWeapon.weaponEntry
+		if weaponEntry == nil then return end
 		local cleanName = string.gsub(weaponEntry.name,"<.->","")
 		local weaponData = self.weaponData[cleanName]
 		local adsMultiplier = 1
