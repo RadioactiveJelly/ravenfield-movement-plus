@@ -10,6 +10,11 @@ function MovementCore:Awake()
 	self.baseActorSpeed = self.script.mutator.GetConfigurationFloat("BaseActorSpeed")
 	self.doDebug = self.script.mutator.GetConfigurationBool("Debug")
 
+	for i = 1, #ActorManager.actors, 1 do
+		local actor = ActorManager.actors[i]
+		actor.speedMultiplier = self.baseActorSpeed
+	end
+
 	self.actorData = {}
 
 	GameEvents.onActorDiedInfo.AddListener(self,"OnActorDiedInfo")
