@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mutators:
   - name: Movement Core
-    description: 1.0.1
+    description: 1.0.2
     menuImage: {fileID: 2800000, guid: 8b8d82971ae021a488e602df0c3fecd9, type: 3}
     mutatorPrefab: {fileID: 9145976721689512765, guid: c470196b0f6b97b48907e251901669c7, type: 3}
     configuration:
@@ -65,7 +65,7 @@ MonoBehaviour:
         value: 0
       dropdowns: []
   - name: Weight System
-    description: 1.0.1
+    description: 1.0.2
     menuImage: {fileID: 2800000, guid: 2308fe6fb6de98441bd6731ecff52e67, type: 3}
     mutatorPrefab: {fileID: 2728837566490073815, guid: 72953313f8d8e2c41985a9e093372da9, type: 3}
     configuration:

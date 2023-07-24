@@ -10,14 +10,14 @@ function MovementCore:Awake()
 	self.baseActorSpeed = self.script.mutator.GetConfigurationFloat("BaseActorSpeed")
 	self.doDebug = self.script.mutator.GetConfigurationBool("Debug")
 
-	for i = 1, #ActorManager.actors, 1 do
-		local actor = ActorManager.actors[i]
-		actor.speedMultiplier = self.baseActorSpeed
-	end
-
 	self.actorData = {}
 
+	GameEvents.onActorSpawn.AddListener(self,"onActorSpawn")
 	GameEvents.onActorDiedInfo.AddListener(self,"OnActorDiedInfo")
+end
+
+function MovementCore:onActorSpawn(actor)
+	self:CalculateMovementSpeed(actor)
 end
 
 function MovementCore:AddModifier(actor,modifierName, modifierValue)
@@ -39,8 +39,10 @@ end
 function MovementCore:CalculateMovementSpeed(actor)
 	local multiplier = 1
 	local modifiers = self.actorData[actor.actorIndex]
-	for modifier, value in pairs(modifiers) do
-		multiplier = multiplier * value
+	if modifiers then
+		for modifier, value in pairs(modifiers) do
+			multiplier = multiplier * value
+		end
 	end
 	
 	actor.speedMultiplier = self.baseActorSpeed * multiplier
